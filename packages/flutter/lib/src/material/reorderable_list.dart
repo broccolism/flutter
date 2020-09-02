@@ -383,8 +383,11 @@ class _ReorderableListContentState extends State<_ReorderableListContent> with T
     // Places the value from startIndex one space before the element at endIndex.
     void reorder(int startIndex, int endIndex) {
       setState(() {
-        if (startIndex != endIndex)
+        if (startIndex != endIndex) {
+          if (startIndex < endIndex)
+            endIndex -= 1;
           widget.onReorder(startIndex, endIndex);
+        }
         // Animates leftover space in the drop area closed.
         _ghostController.reverse(from: 0.1);
         _entranceController.reverse(from: 0.1);
@@ -403,11 +406,9 @@ class _ReorderableListContentState extends State<_ReorderableListContent> with T
 
       // Create the appropriate semantics actions.
       void moveToStart() => reorder(index, 0);
-      void moveToEnd() => reorder(index, widget.children.length);
+      void moveToEnd() => reorder(index, widget.children.length - 1);
       void moveBefore() => reorder(index, index - 1);
-      // To move after, we go to index+2 because we are moving it to the space
-      // before index+2, which is after the space at index+1.
-      void moveAfter() => reorder(index, index + 2);
+      void moveAfter() => reorder(index, index + 1);
 
       final MaterialLocalizations localizations = MaterialLocalizations.of(context);
 
