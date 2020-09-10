@@ -397,7 +397,11 @@ class _ReorderableListContentState extends State<_ReorderableListContent> with T
 
     // Drops toWrap into the last position it was hovering over.
     void onDragEnded() {
-      reorder(_dragStartIndex, _currentIndex);
+      final int endIndex =
+          _currentIndex > _dragStartIndex
+          ? _currentIndex - 1
+          : _currentIndex;
+      reorder(_dragStartIndex, endIndex);
     }
 
     Widget wrapWithSemantics() {
